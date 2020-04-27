@@ -53,3 +53,62 @@ echo json_encode("cliente agregado ") ;
 }
 
 });
+
+//metodo para saber si un usuario se encuentra en la base de datos dado un id, password y $direccion
+
+//PUT para MODIFICAR usuario
+$app->put('/api/usuario/actualizar/{id}/{password}/{direccion}', function(Request $request, Response $response){
+$id= $request ->getAttribute('id');
+$password = $request ->getAttribute('password');
+$direccion = $request ->getAttribute('direccion');
+$nombre = $request ->getParam('nombre');
+$apellidos = $request ->getParam('apellidos');
+$email = $request ->getParam('email');
+
+
+$sql = "UPDATE usuario SET
+nombre = :nombre,
+apellidos = :apellidos,
+email = :email,
+password = :password,
+direccion = :direccion
+WHERE id = '$id' AND password='$password' AND direccion='$direccion'";
+
+$busqueda = "SELECT * FROM usuario WHERE id = '$id'
+AND password='$password' AND direccion='$direccion'";
+try {
+  $db1 = new db();
+  $db1 = $db1-> conectDB();
+  $confirmacion = $db1->query($busqueda);
+  if ($confirmacion -> rowcount() > 0) {
+    try {
+      $db = new db();
+      $db = $db-> conectDB();
+      $resultado = $db->prepare($sql);
+    $resultado ->bindParam(':nombre', $nombre);
+    $resultado ->bindParam(':apellidos', $apellidos);
+    $resultado ->bindParam(':email', $email);
+    $resultado ->bindParam(':password', $password);
+    $resultado ->bindParam(':direccion', $direccion);
+    $resultado -> execute();
+    echo json_encode("1: cliente actualizado ") ;
+
+      $resultado = null;
+      $db= null;
+
+    } catch (PDOEXCEPTION $e) {
+      echo '{"0" :{"text":'.$e->getMessage().'}';
+    }
+  }else{
+  echo json_encode("0: cliente no actualizado, parametros incorrectos ") ;
+  }
+
+  $confirmacion = null;
+  $db1= null;
+
+
+} catch (PDOEXCEPTION $e) {
+  echo '{"error" :{"text":'.$e->getMessage().'}';
+}
+
+});
