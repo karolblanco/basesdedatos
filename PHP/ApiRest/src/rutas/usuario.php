@@ -64,7 +64,8 @@ $direccion = $request ->getAttribute('direccion');
 $nombre = $request ->getParam('nombre');
 $apellidos = $request ->getParam('apellidos');
 $email = $request ->getParam('email');
-
+$passwordcambio = $request ->getParam('password');
+$direccioncambio = $request ->getParam('direccion');
 
 $sql = "UPDATE usuario SET
 nombre = :nombre,
@@ -88,8 +89,8 @@ try {
     $resultado ->bindParam(':nombre', $nombre);
     $resultado ->bindParam(':apellidos', $apellidos);
     $resultado ->bindParam(':email', $email);
-    $resultado ->bindParam(':password', $password);
-    $resultado ->bindParam(':direccion', $direccion);
+    $resultado ->bindParam(':password', $passwordcambio);
+    $resultado ->bindParam(':direccion', $direccioncambio);
     $resultado -> execute();
     echo json_encode("1: cliente actualizado ") ;
 
