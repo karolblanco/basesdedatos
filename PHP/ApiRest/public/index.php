@@ -9,4 +9,6 @@ $app = new \Slim\App;
 require '../src/rutas/hotel.php';
 //ruta usuario
 require '../src/rutas/usuario.php';
+//ruta apikey
+require '../src/rutas/apikey.php';
 $app->run();
